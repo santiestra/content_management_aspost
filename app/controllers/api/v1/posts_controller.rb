@@ -16,8 +16,6 @@ module Api
       end
 
       def create
-        p post_params
-
         post = Post.new(
           company_id: company_id,
           user_id: user_id,
@@ -27,6 +25,8 @@ module Api
 
         post.save!
         render json: { post: post }
+      rescue ActiveRecord::RecordInvalid => e
+        render json: { post: { errors: post.errors } }, status: :unprocessable_entity
       end
 
       def update
